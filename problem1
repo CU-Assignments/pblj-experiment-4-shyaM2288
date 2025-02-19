@@ -1,0 +1,149 @@
+Aim: write a program to implement an array list that stores employee details (ID, name, salary) Allow user to add update remove and search employees.
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Employee {
+    String empId;
+    String name;
+    double salary;
+
+    public Employee(String empId, String name, double salary) {
+        this.empId = empId;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    
+    public String toString() {
+        return "ID: " + empId + ", Name: " + name + ", Salary: " + salary;
+    }
+}
+
+class EmployeeList {
+    private ArrayList<Employee> employees;
+
+    public EmployeeList() {
+        employees = new ArrayList<>();
+    }
+
+    public void addEmployee(String empId, String name, double salary) {
+        Employee newEmployee = new Employee(empId, name, salary);
+        employees.add(newEmployee);
+    }
+
+    public void updateEmployee(String empId, String name, Double salary) {
+        Employee employee = findEmployee(empId);
+        if (employee != null) {
+            if (name != null && !name.isEmpty()) {
+                employee.name = name;
+            }
+            if (salary != null) {
+                employee.salary = salary;
+            }
+            System.out.println("Employee " + empId + " updated successfully.");
+        } else {
+            System.out.println("Employee not found.");
+        }
+    }
+
+    public void removeEmployee(String empId) {
+        Employee employee = findEmployee(empId);
+        if (employee != null) {
+            employees.remove(employee);
+            System.out.println("Employee " + empId + " removed successfully.");
+        } else {
+            System.out.println("Employee not found.");
+        }
+    }
+
+    public void searchEmployee(String empId) {
+        Employee employee = findEmployee(empId);
+        if (employee != null) {
+            System.out.println(employee);
+        } else {
+            System.out.println("Employee not found.");
+        }
+    }
+
+    private Employee findEmployee(String empId) {
+        for (Employee employee : employees) {
+            if (employee.empId.equals(empId)) {
+                return employee;
+            }
+        }
+        return null;
+    }
+
+    public void displayEmployees() {
+        if (employees.isEmpty()) {
+            System.out.println("No employees found.");
+        } else {
+            for (Employee employee : employees) {
+                System.out.println(employee);
+            }
+        }
+    }
+}
+
+public class EmployeeManagementSystem {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        EmployeeList employeeList = new EmployeeList();
+
+        while (true) {
+            System.out.println("\nEmployee Management System");
+            System.out.println("1. Add Employee");
+            System.out.println("2. Update Employee");
+            System.out.println("3. Remove Employee");
+            System.out.println("4. Search Employee");
+            System.out.println("5. Display All Employees");
+            System.out.println("6. Exit");
+
+            System.out.print("Enter your choice: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    System.out.print("Enter employee ID: ");
+                    String empId = scanner.nextLine();
+                    System.out.print("Enter employee name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter employee salary: ");
+                    double salary = Double.parseDouble(scanner.nextLine());
+                    employeeList.addEmployee(empId, name, salary);
+                    break;
+                case "2":
+                    System.out.print("Enter employee ID to update: ");
+                    empId = scanner.nextLine();
+                    System.out.print("Enter new name (leave blank to keep current): ");
+                    name = scanner.nextLine();
+                    System.out.print("Enter new salary (leave blank to keep current): ");
+                    String salaryInput = scanner.nextLine();
+                    Double newSalary = salaryInput.isEmpty() ? null : Double.parseDouble(salaryInput);
+                    employeeList.updateEmployee(empId, name.isEmpty() ? null : name, newSalary);
+                    break;
+                case "3":
+                    System.out.print("Enter employee ID to remove: ");
+                    empId = scanner.nextLine();
+                    employeeList.removeEmployee(empId);
+                    break;
+                case "4":
+                    System.out.print("Enter employee ID to search: ");
+                    empId = scanner.nextLine();
+                    employeeList.searchEmployee(empId);
+                    break;
+                case "5":
+                    employeeList.displayEmployees();
+                    break;
+                case "6":
+                    System.out.println("Exiting the system.");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+}
